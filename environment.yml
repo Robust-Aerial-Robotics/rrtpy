@@ -1,0 +1,23 @@
+name: rrtpy
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - plotly
+  - pillow
+  - sympy
+  - opencv
+  - matplotlib
+  - numpy
+  - scipy
+  - control
+  - pydot
+  - autopep8
+  - pytest=5.0.1
+  - jupyterlab
+  - ffmpeg
+  - openh264
+  - pandas
+  - pip:
+    - casadi
