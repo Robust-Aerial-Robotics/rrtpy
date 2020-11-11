@@ -9,6 +9,7 @@ These functions implement the SE2 Lie Group see (http://ethaneade.com/lie.pdf)
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def SE2_log(M):
     """
     Matrix logarithm for SE2 Lie group
@@ -25,6 +26,7 @@ def SE2_log(M):
     u = V_inv.dot(t)
     return np.array([theta, u[0], u[1]])
 
+
 def SE2_from_param(v):
     """
     Create SE2 from paramters, [theta, x, y]
@@ -36,6 +38,7 @@ def SE2_from_param(v):
         [0, 0, 1]
     ])
 
+
 def SE2_to_param(M):
     """
     From matrix to [theta, x, y]
@@ -44,6 +47,7 @@ def SE2_to_param(M):
     x = M[0, 2]
     y = M[1, 2]
     return np.array([theta, x, y])
+
 
 def SE2_inv(M):
     """
@@ -55,6 +59,7 @@ def SE2_inv(M):
         [R.T, -R.T.dot(t)],
         [0, 0, 1]
     ])
+
 
 def SE2_exp(v):
     """
@@ -76,6 +81,7 @@ def SE2_exp(v):
         [R, V.dot(u)],
         [0, 0,  1]])
 
+
 def test_SE2():
     v = np.random.randn(3)
     X = SE2_from_param(v)
@@ -88,6 +94,7 @@ def test_SE2():
     assert np.allclose(X.dot(SE2_inv(X)), np.eye(3))
     assert np.allclose(SE2_log(SE2_exp(v)) - v, np.zeros(3))
     assert np.allclose(SE2_to_param(SE2_from_param(v)) - v, np.zeros(3))
+
 
 def sample(X_goal, box):
     """
@@ -116,6 +123,7 @@ def sample(X_goal, box):
         else:
             return XS, False
 
+
 def find_u_R_d(X0, X1):
     """
     Compute arch length, radius, and euclidean distance
@@ -131,6 +139,7 @@ def find_u_R_d(X0, X1):
         u = d
     
     return u, R, d
+
 
 def distance(X0, X1):
     """
@@ -148,6 +157,7 @@ def distance(X0, X1):
     if u < 0:
         cost = np.infty
     return cost
+
 
 def local_path_planner(X0, X1, dist):
     """
@@ -167,6 +177,7 @@ def local_path_planner(X0, X1, dist):
         omega = u/R
     v = np.array([omega, u, 0])
     return X0.dot(SE2_exp(v))
+
 
 def collision(collision_points, vehicle_radius, X0, X1, box, steps):
     """
