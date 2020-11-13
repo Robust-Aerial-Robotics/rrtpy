@@ -351,6 +351,8 @@ def rrt(X_start, X_goal, vehicle_radius, box, collision_points, plot, max_iterat
             p_path = np.array(p_path)
             plt.plot(p_path[:, 0], p_path[:, 1],  'r-', alpha=0.1)
 
+
+
         # use euclidean distance to check for termination
         dist = goal_dist(X1)
         if dist < dist_best:
@@ -364,6 +366,7 @@ def rrt(X_start, X_goal, vehicle_radius, box, collision_points, plot, max_iterat
 
     # build the path
     path = node_best.path()
+
 
     path_full = []
     for i in range(len(path) - 1):
@@ -406,7 +409,9 @@ def rrt(X_start, X_goal, vehicle_radius, box, collision_points, plot, max_iterat
         plt.ylabel('y, m')
         plt.title('RRT')
         plt.legend()
-        plt.show()
+        the_plot = plt.show()
+        the_plot.savefig("plot.png")
+
 
     return {
         'success': success,
@@ -417,7 +422,7 @@ def rrt(X_start, X_goal, vehicle_radius, box, collision_points, plot, max_iterat
 if __name__ == "__main__":
     import argparse
     import numpy as np
-    data = np.genfromtxt('laser_data.csv', delimiter=',', skip_header=True)
+    data = np.genfromtxt('obstacles.csv', delimiter=',', skip_header=True)
 
     test_SE2()
 
@@ -432,10 +437,15 @@ if __name__ == "__main__":
     box = [-5, 5, -5, 12.5, ]
     collision_points = np.vstack([data[:, 0], data[:, 1], 0.1*np.ones(data.shape[0])]).T
 
-    ret = rrt(X_start=X_start, X_goal=X_goal, vehicle_radius=0.5,
+    ret = rrt(X_start=X_start, X_goal=X_goal, vehicle_radius=0.25,
             box=box, collision_points=collision_points,
             plot=plot, max_iterations=1000, dist_plan=3.0, tolerance=0.5)
-    print('success', ret['success'])
 
+    for i in range(0, len(ret['path'])):
+        theta, x, y = SE2_to_param(ret['path'][i].position)
+        print([x, y, 1, theta])
+        print()
+
+    print('success', ret['success'])
 
 #%%
