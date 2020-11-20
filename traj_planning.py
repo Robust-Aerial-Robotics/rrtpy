@@ -14,10 +14,14 @@ with open('rrt_result.csv', 'r') as f:
 M = []
 for line in lines:
     values = line.split(',')
+    row = [0,0,0,values[3]]
     row = []
+
     for value in values:
         row.append(value)
     M.append(row)
+final_row = [row[0], row[1], 0, row[3]]
+M.append(final_row)
 
 waypoints = np.array(M)
     # x, y, z, yaw
