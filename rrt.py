@@ -8,6 +8,7 @@ These functions implement the SE2 Lie Group see (http://ethaneade.com/lie.pdf)
 
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 
 def SE2_log(M):
@@ -410,7 +411,7 @@ def rrt(X_start, X_goal, vehicle_radius, box, collision_points, plot, max_iterat
         plt.title('RRT')
         plt.legend()
         the_plot = plt.show()
-        the_plot.savefig("plot.png")
+        plt.savefig("plot.png")
 
 
     return {
@@ -422,7 +423,7 @@ def rrt(X_start, X_goal, vehicle_radius, box, collision_points, plot, max_iterat
 if __name__ == "__main__":
     import argparse
     import numpy as np
-    data = np.genfromtxt('obstacles.csv', delimiter=',', skip_header=True)
+    data = np.genfromtxt('laser_data.csv', delimiter=',', skip_header=True)
 
     test_SE2()
 
@@ -441,10 +442,20 @@ if __name__ == "__main__":
             box=box, collision_points=collision_points,
             plot=plot, max_iterations=1000, dist_plan=3.0, tolerance=0.5)
 
+    M = []
+
     for i in range(0, len(ret['path'])):
         theta, x, y = SE2_to_param(ret['path'][i].position)
+        line = [x, y, 1, theta]
         print([x, y, 1, theta])
         print()
+        M.append(line)
+
+    print(M)
+
+    with open('rrt_result.csv', 'w') as f:
+        writer = csv.writer(f)
+        writer.writerows(M)
 
     print('success', ret['success'])
 
